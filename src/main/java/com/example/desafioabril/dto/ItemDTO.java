@@ -1,14 +1,31 @@
 package com.example.desafioabril.dto;
 
-public class ItemDTO {
-    private String nome;
-    private int quantidade;
-    private Long usuarioId;
+import com.example.desafioabril.model.Item;
 
-    public ItemDTO(String nome, int quantidade, Long usuarioId) {
-        this.nome = nome;
-        this.quantidade = quantidade;
-        this.usuarioId = usuarioId;
+import java.time.LocalDateTime;
+
+public class ItemDTO {
+    private Long id_item;
+    private String nome;
+    private LocalDateTime data;
+    private Integer quantidade;
+    private Long id_usuario;
+
+    public ItemDTO(Item item) {
+        this.id_item = item.getId_item();
+        this.nome = item.getNome();
+        this.data = item.getData();
+        this.quantidade = item.getQuantidade();
+        this.id_usuario = item.getUsuario().getId_usuario();
+
+    }
+
+    public Long getId_item() {
+        return id_item;
+    }
+
+    public void setId_item(Long id_item) {
+        this.id_item = id_item;
     }
 
     public String getNome() {
@@ -19,19 +36,30 @@ public class ItemDTO {
         this.nome = nome;
     }
 
-    public int getQuantidade() {
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Long getId_usuario() {
+        return id_usuario;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setId_usuario(Long id_usuario) {
+        this.id_usuario = id_usuario;
     }
 }
+
+
+

@@ -50,10 +50,9 @@ public class UsuarioService implements UserDetailsService {
         usuarioExistente.setNome(usuariodTO.getNome());
         usuarioExistente.setEmail(usuariodTO.getEmail());
 
-        if (usuariodTO.getSenha() != null && !usuariodTO.getSenha().isBlank()) {
-            String senhaCriptografada = passwordEncoder.encode(usuariodTO.getSenha());
-            usuarioExistente.setSenha(senhaCriptografada);
-        }
+        Optional.ofNullable(usuariodTO.getSenha())
+                .filter(senha -> !senha.isBlank())
+                .ifPresent(senha -> usuarioExistente.setSenha(passwordEncoder.encode(senha)));
 
         usuarioRepository.save(usuarioExistente);
 

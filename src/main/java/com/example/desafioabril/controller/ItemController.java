@@ -1,5 +1,6 @@
 package com.example.desafioabril.controller;
 
+import com.example.desafioabril.dto.ItemCadastroDTO;
 import com.example.desafioabril.dto.ItemDTO;
 import com.example.desafioabril.model.Item;
 import com.example.desafioabril.services.ItemService;
@@ -16,20 +17,21 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<ItemDTO> cadastrarItem(@RequestBody ItemDTO itemDto) {
-        ItemDTO itemDTO = itemService.cadastrarItem(itemDto);
+    public ResponseEntity<ItemCadastroDTO> cadastrarItem(@RequestBody ItemCadastroDTO itemDto) {
+        ItemCadastroDTO itemDTO = itemService.cadastrarItem(itemDto);
         return ResponseEntity.ok().body(itemDTO);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Item>> listarItems() {
+    public ResponseEntity<List<ItemDTO>> listarItems() {
         List<Item> items = itemService.listarItems();
-        return ResponseEntity.ok(items);
+        List<ItemDTO> itemDTOs = items.stream().map(ItemDTO::new).toList();
+        return ResponseEntity.ok(itemDTOs);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemDTO> editarItem(@PathVariable Long id, @RequestBody ItemDTO itemDto) {
-        ItemDTO edicaoItem = itemService.editarItem(id, itemDto);
+    public ResponseEntity<ItemCadastroDTO> editarItem(@PathVariable Long id, @RequestBody ItemCadastroDTO itemDto) {
+        ItemCadastroDTO edicaoItem = itemService.editarItem(id, itemDto);
         return ResponseEntity.ok().body(edicaoItem);
     }
 

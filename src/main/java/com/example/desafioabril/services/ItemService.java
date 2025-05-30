@@ -1,5 +1,6 @@
 package com.example.desafioabril.services;
 
+import com.example.desafioabril.dto.ItemCadastroDTO;
 import com.example.desafioabril.dto.ItemDTO;
 import com.example.desafioabril.exceptions.ItemDuplicadoException;
 import com.example.desafioabril.exceptions.ItemNotFoundException;
@@ -22,22 +23,22 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public ItemDTO cadastrarItem(ItemDTO itemDTO) {
+    public ItemCadastroDTO cadastrarItem(ItemCadastroDTO itemCadastroDTO) {
         var usuarioLogado = getUsuarioLogado();
 
-        itemRepository.findByNome(itemDTO.getNome()).ifPresent(item -> {
-            throw new ItemDuplicadoException("Item com este nome: " + itemDTO.getNome() + " já existe");
+        itemRepository.findByNome(itemCadastroDTO.getNome()).ifPresent(item -> {
+            throw new ItemDuplicadoException("Item com este nome: " + itemCadastroDTO.getNome() + " já existe");
         });
 
         Item novoItem = new Item(
-                itemDTO.getNome(),
+                itemCadastroDTO.getNome(),
                 LocalDateTime.now(),
-                itemDTO.getQuantidade(),
+                itemCadastroDTO.getQuantidade(),
                 usuarioLogado
         );
 
         itemRepository.save(novoItem);
-        return new ItemDTO(novoItem.getNome(), novoItem.getQuantidade(), usuarioLogado.getId_usuario());
+        return new ItemCadastroDTO(novoItem.getNome(), novoItem.getQuantidade(), usuarioLogado.getId_usuario());
     }
 
     public List<Item> listarItems() {
@@ -46,16 +47,16 @@ public class ItemService {
         return itemRepository.findByUsuario(usuarioLogado);
     }
 
-    public ItemDTO editarItem(Long id, ItemDTO itemDTO) {
+    public ItemCadastroDTO editarItem(Long id, ItemCadastroDTO itemCadastroDTO) {
         Item itemExistente = itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Item com ID " + id + "não encontrado"));
 
-        itemExistente.setNome(itemDTO.getNome());
-        itemExistente.setQuantidade(itemDTO.getQuantidade());
+        itemExistente.setNome(itemCadastroDTO.getNome());
+        itemExistente.setQuantidade(itemCadastroDTO.getQuantidade());
 
         itemRepository.save(itemExistente);
 
-        return new ItemDTO(itemDTO.getNome(), itemDTO.getQuantidade(), itemDTO.getUsuarioId());
+        return new ItemCadastroDTO(itemCadastroDTO.getNome(), itemCadastroDTO.getQuantidade(), itemCadastroDTO.getUsuarioId());
     }
 
     public void excluirItem(Long id) {
